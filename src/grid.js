@@ -39,16 +39,19 @@ function init (options={}) {
             name: options.name || 'test',
             cols,
             rows,
-            selectedLayer: 0,
+            selectedLayer: 1, // the id of the selected layer
             selectedTile: 3,
-            layers: [
-                {
+            layers: {
+                1: {
                     name: 'init',
                     type: 'tile',   // tile | object
                     cells: createArray(cols * rows, 0),
                     locked: false,
                     visible: true
                 }
+            },
+            layerOrder: [
+                1
             ],
             tileset: {
                 name: 'main tileset',
@@ -108,8 +111,8 @@ function _drawCanvas (model) {
 
     model.context.stroke()
 
-    for (let i=0; i < model.level.layers.length; i++) {
-        const layer = model.level.layers[i]
+    for (const layerId of model.level.layerOrder) {
+        const layer = model.level.layers[layerId]
 
         if (layer.type !== 'tile' || !layer.visible)
             continue
@@ -174,7 +177,7 @@ function view (model, update) {
         
         const cmd = {
             type: model.activeCommand,
-            layerIdx: model.level.selectedLayer,
+            layerId: model.level.selectedLayer,
             cellIdx,
         }
 
@@ -198,7 +201,7 @@ function view (model, update) {
         for (let i=0; i < model.commandStack.commands.length; i++) {
             const cmd = model.commandStack.commands[i]
            
-            if (cmd.layerIdx !== model.level.selectedLayer)
+            if (cmd.layerId !== model.level.selectedLayer)
                 continue
 
             if (cmd.type === 'drawTile' || cmd.type === 'eraseTile')
@@ -222,7 +225,7 @@ function view (model, update) {
                 
                 const cmd = {
                     type: model.activeCommand,
-                    layerIdx: model.level.selectedLayer,
+                    layerId: model.level.selectedLayer,
                     cellIdx,
                 }
 
