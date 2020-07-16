@@ -216,13 +216,13 @@ function view (model, update) {
         model.hoverY = ev.offsetY + model.scrollY
 
         if (model.down) {
-            const col = Math.floor(ev.layerX / constants.TILE_SIZE)
-            const row = Math.floor(ev.layerY / constants.TILE_SIZE)
+            const col = Math.floor((ev.layerX +  model.scrollX) / constants.TILE_SIZE)
+            const row = Math.floor((ev.layerY +  model.scrollY) / constants.TILE_SIZE)
 
             bresenham(model.lastCol, model.lastRow, col, row, function (c, r) {
-               
-                const cellIdx = r * model.level.cols + c
                 
+                const cellIdx = r * model.level.cols + c
+
                 const cmd = {
                     type: model.activeCommand,
                     layerId: model.level.selectedLayer,
