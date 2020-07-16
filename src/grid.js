@@ -284,6 +284,7 @@ function view (model, update) {
                         @on:wheel=${_wheel}
                         @on:mousedown=${_mousedown}
                         @on:mouseup=${_mouseup}
+                        @on:mouseleave=${_mouseup}
                         @on:mousemove=${_mousemove}
                         @hook:insert=${_insertHook}></canvas>`
 }
